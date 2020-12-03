@@ -257,9 +257,9 @@ Each message that is sent is encrypted and decrypted in this way using encrypt()
 Example of encryption of the request on Server side:
 ![Alt text](screenshots/AES.jpg)
 
-Example Example of encryption of the request on Client side:
-![Alt text](screenshots/AES_1.png)
--------------------------
+Example of encryption of the request on Client side:
+![Alt text](screenshots/AES1.jpg)
+
 
 ## How to use
 - Run first main method located in HTTPServerApplication.java class. In console write your directory with files which you would like to manage "-d C:\\..." 
