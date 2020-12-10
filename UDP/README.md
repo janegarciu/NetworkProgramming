@@ -241,24 +241,29 @@ Obviously sequenceNumber++; of each packet increases.
  
 --------------------
 **Encryption algorithm**
-
+I have added Diffie Hellman key exchange protocol in order to transfer information in a secure way through the unsecured channel.
+First of all I use **_AlgorithmParameterGenerator_** library which is helping me to generate parameters. Here is the scheme of what is going on while key generation proceess:
+        client receives p(prime number) and g (prime number's generator) from server
+        client generates a secret number (b)
+        client calculates B=g^b(modp)
+        client receives A from the server
+        client sends B to server.
+        client calculates A^b(modp)
+        client now has the secret key
+Keys are generated at the begginning, just type a message "generate keys" from the Client command line.
 In order to encrypt the data encapsulated in packets I have used AES(Advanced Encryption Standard).
 AES is block cipher capable of handling 128 bit blocks, using keys sized at 128, 192, and 256 bits. Each cipher encrypts and decrypts data in blocks of 128 bits using cryptographic keys of 128-, 192- and 256-bits, respectively. 
-It uses the same key for encrypting and decrypting, so the sender and the receiver must both know — and use — the same secret key.
 
 All logic can be found in AES.java class.
-I have used base64 encoding in UTF-8 charset.
-Each message that is sent is encrypted and decrypted in this way using encrypt() and decrypt() methods:
-```
-                String message = AES.encrypt(clientPayload, "Burlacu"); //"Burlacu" is the secret key
-                String decryptedPayload = AES.decrypt(payload, "Burlacu");
-```
 
-Example of encryption of the request on Server side:
-![Alt text](screenshots/AES.jpg)
+Client secret key generated:
+![Alt text](screenshots/AES(DH)-Client.png)
 
-Example of encryption of the request on Client side:
-![Alt text](screenshots/AES1.jpg)
+Server secret key generated:
+![Alt text](screenshots/AES(DH)-Server.png)
+
+Example of encrypted Payload:
+![Alt text](screenshots/EncryptedPayload.png)
 
 
 ## How to use

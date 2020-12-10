@@ -122,8 +122,13 @@ public static ByteBuffer buf = null;
             }
 
         }
-        //---implementation
-        // receive prime number from server
+        // client receives p(prime number) and g (prime number's generator) from server
+        // client selects a secret number (b)
+        // client calculates B=g^b(modp)
+        // client receives A from the server
+        // client sends B to server.
+        // client calculates s=A^b(modp)
+        // client now has the secret key
 
         // generate secret b
         Random randomGenerator = new Random();
