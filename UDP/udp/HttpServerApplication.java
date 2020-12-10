@@ -3,13 +3,15 @@ package udp;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidParameterSpecException;
 
 public class HttpServerApplication {
 	
-	public static void main(String[] args) throws IOException{ 
+	public static void main(String[] args) throws IOException, InvalidParameterSpecException, NoSuchAlgorithmException {
 
 		int port = 8080; // Default port number
-		String directory = "/Users/janegarciu/Documents/NP/UDP-Client-Server-Application"; // Default directory
+		String directory = "/Users/janegarciu/Documents/NetworkProgramming/UDP"; // Default directory
 
 		udp.UDPServer server = new udp.UDPServer(); // server object
 		BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); // User input

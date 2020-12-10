@@ -1,19 +1,18 @@
-#Second lab at network programming(Client-Server Project)
   
-  ## Table of contents
+# Table of contents
   
   * [Task Description](#task-description)
   * [File List](#file-list)
   * [Implementation](#implementation)
   * [How to use](#how-to-use)
   
-## Task Description
+# Task Description
 In this project we should implement a protocol stack, namely a transport protocol based on UDP, a session-level security protocol inspired by SSL/TLS, and an application-level protocol.
 You must present this project as a client and a server, both using a library that contains the protocol logic.
 The library must be made up of 3 modules, for each level of the protocol stack, with a well-defined API and that adheres to the layered architecture.
 For transport and session level protocols the BSD Sockets API is a recommended source of inspiration, while for the application-level protocol something that resembles an HTTP client API is a recommended source of inspiration.
 
-## File List
+# File List
 - HttpServerApplication.java
 - UDPClient.java
 - UDPServer.java
@@ -21,7 +20,7 @@ For transport and session level protocols the BSD Sockets API is a recommended s
 - AES.java
 
 
-## Implementation 
+# Implementation 
 
 I have the following features implemented in my project :
 * Client
@@ -80,7 +79,9 @@ The receive( ) method writes one datagram packet from the channel into a ByteBuf
  * GET file with text
  * UPDATE existed file with text(Same POST, but updating existing file)
  
+ 
  **HTTP parser**
+ 
  It has a very simple logic in order to simulate basic operations of HTTP API requests.
  
  Client sends request
@@ -118,7 +119,8 @@ Also there are implemented methods for "3 way handshake" in order to make UDP co
 --------------------
 **Client**
 
-Get request
+*Get request*
+
 It accepts client request as a parameter. Written request is split by spaces and analyzed on header presence. 
 
 In order to send this payload to server and establish the connection, three-way handshake operation is performed:
@@ -183,7 +185,7 @@ Otherwise, connection can be identified as terminated.
 
 --------------------
 
-Post request
+*Post request*
 
 Simmilar to the GET request logic is in here. Request is split by spaces and analyzed on header and directory presence. We need to specify directory in order to create a file in which later we will be able to post data that we are sending.
 After that http request payload is constructed. Three-way handshake described above is done. Now we can send our payload to the server. For this we encrypt our data with secret encryption key, in my case secret key is "Burlacu". Packet is constructed and sent to the server and client is waiting for the response 
@@ -251,12 +253,13 @@ Each message that is sent is encrypted and decrypted in this way using encrypt()
                 String message = AES.encrypt(clientPayload, "Burlacu"); //"Burlacu" is the secret key
                 String decryptedPayload = AES.decrypt(payload, "Burlacu");
 ```
-Example Server:
-![Alt text](UDP/screenshots/AES.jpg)
 
-Example Client:
-![Alt text](UDP/screenshots/AES_1.png)
--------------------------
+Example of encryption of the request on Server side:
+![Alt text](screenshots/AES.jpg)
+
+Example of encryption of the request on Client side:
+![Alt text](screenshots/AES1.jpg)
+
 
 ## How to use
 - Run first main method located in HTTPServerApplication.java class. In console write your directory with files which you would like to manage "-d C:\\..." 

@@ -15,14 +15,14 @@ public class Packet {
     public static final int MIN_LEN = 11;
     public static final int MAX_LEN = 11 + 1024;
 
-    private final int type;
+    private final long type;
     private final long sequenceNumber;
     private final InetAddress peerAddress;
     private final int peerPort;
     private final byte[] payload;
 
 
-    public Packet(int type, long sequenceNumber, InetAddress peerAddress, int peerPort, byte[] payload) {
+    public Packet(long type, long sequenceNumber, InetAddress peerAddress, int peerPort, byte[] payload) {
         this.type = type;
         this.sequenceNumber = sequenceNumber;
         this.peerAddress = peerAddress;
@@ -30,7 +30,7 @@ public class Packet {
         this.payload = payload;
     }
 
-    public int getType() {
+    public long getType() {
         return type;
     }
 
@@ -106,7 +106,7 @@ public class Packet {
 
         Builder builder = new Builder();
 
-        builder.setType(Byte.toUnsignedInt(buf.get()));
+        builder.setType(Byte.toUnsignedLong(buf.get()));
         builder.setSequenceNumber(Integer.toUnsignedLong(buf.getInt()));
 
         byte[] host = new byte[]{buf.get(), buf.get(), buf.get(), buf.get()};
@@ -136,13 +136,13 @@ public class Packet {
     }
 
     public static class Builder {
-        private int type;
+        private long type;
         private long sequenceNumber;
         private InetAddress peerAddress;
         private int portNumber;
         private byte[] payload;
 
-        public Builder setType(int type) {
+        public Builder setType(long type) {
             this.type = type;
             return this;
         }

@@ -6,53 +6,65 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.Key;
 import java.security.spec.KeySpec;
 import java.util.Base64;
 
 public class AES {
 
     private static String salt = "PRLab2";
-    public static String encrypt(String strToEncrypt, String secretKey)
-    {
-        try
-        {
-            byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            IvParameterSpec ivspec = new IvParameterSpec(iv);
+    // for using Cipher
+    private static Cipher cipher = null;
 
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            KeySpec spec = new PBEKeySpec(secretKey.toCharArray(), salt.getBytes(), 65536, 256);
-            SecretKey tmp = factory.generateSecret(spec);
-            SecretKeySpec secret= new SecretKeySpec(tmp.getEncoded(), "AES");
+    public static String encryptFile(String plainText, Key secretKey) {
+        byte[] plainTextByte = plainText.getBytes();
 
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, secret, ivspec);
-            return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
+        String encryptedText = "";
+
+        try {
+            try {
+                cipher = Cipher.getInstance("AES");
+            } catch(Exception e) {
+                System.err.println("Error while getting AES algorithm: " + e);
+            }
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+            byte[] encryptedByte = cipher.doFinal(plainTextByte);
+
+            Base64.Encoder encoder = Base64.getEncoder();
+
+            encryptedText = encoder.encodeToString(encryptedByte);
+
+        } catch(Exception e) {
+            System.err.println("Error while initializing Cipher while encrypting text: " + e);
         }
-        catch (Exception e)
-        {
-            System.out.println("Error while encrypting: " + e.toString());
-        }
-        return null;
+
+        return encryptedText;
     }
 
-    public static String decrypt(String strToDecrypt, String secretKey) {
-        try
-        {
-            byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            IvParameterSpec ivspec = new IvParameterSpec(iv);
+    // decryptFile method takes encrypted text and decrypts it with secretKey, returns decrypted string
+    public static String decryptFile(String encryptedText, Key secretKey) {
+        Base64.Decoder decoder = Base64.getDecoder();
 
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            KeySpec spec = new PBEKeySpec(secretKey.toCharArray(), salt.getBytes(), 65536, 256);
-            SecretKey tmp = factory.generateSecret(spec);
-            SecretKeySpec secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+        byte[] encryptedTextByte = decoder.decode(encryptedText);
 
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-            cipher.init(Cipher.DECRYPT_MODE, secret, ivspec);
-            return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
+        String decryptedText = "";
+
+        try {
+            try {
+                cipher = Cipher.getInstance("AES");
+            } catch(Exception e) {
+                System.err.println("Error while getting AES algorithm: " + e);
+            }
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+            byte[] decryptedByte = cipher.doFinal(encryptedTextByte);
+
+            decryptedText = new String(decryptedByte);
+        } catch(Exception e) {
+            System.err.println("Error while initializing Cipher while decrypting text: " + e);
         }
-        catch (Exception e) {
-            System.out.println("Error while decrypting: " + e.toString());
-        }
-        return null;
+
+        return decryptedText;
     }
 }
